@@ -1,8 +1,13 @@
 // Import the Express module
 import express from 'express';
 
+import swaggerJSDoc from "swagger-jsdoc";
+
+import swaggerUi from "swagger-ui-express";
+
 // Import the index routes module
 import indexRoutes from './routes/index.js';
+import institutionRoutes from "./routes/institution.js";
 import aboutRoutes from './routes/about.js';
 import courseRoutes from './routes/courses.js';
 
@@ -12,8 +17,38 @@ const app = express();
 // Use the PORT environment variable or 3000
 const PORT = process.env.PORT || 3000;
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+const swaggerOptions = {
+    definition: {
+      openapi: "3.0.0",
+      info: {
+        title: "Student Management System API",
+        version: "1.0.0",
+        description: "A student management system API",
+        contact: {
+          name: "Grayson Orr",
+        },
+      },
+      servers: [
+        {
+          url: "http://localhost:3000",
+        },
+      ],
+    },
+    apis: ["./routes/*.js"],
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
 // Use the routes module
 app.use('/', indexRoutes);
+
+app.use("/api/institutions", institutionRoutes);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use('/', aboutRoutes);
 app.use('/', courseRoutes);
 
