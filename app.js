@@ -7,7 +7,9 @@ import swaggerUi from "swagger-ui-express";
 
 // Import the index routes module
 import indexRoutes from './routes/index.js';
-import institutionRoutes from "./routes/institution.js";
+import institutionRoutes from "./routes/v1/institution.js";
+import departmentRoutes from "./routes/v1/department.js";
+import { isContentTypeApplicationJSON } from "./middleware/utils.js";
 import aboutRoutes from './routes/about.js';
 import courseRoutes from './routes/courses.js';
 
@@ -37,15 +39,17 @@ const swaggerOptions = {
         },
       ],
     },
-    apis: ["./routes/*.js"],
+    apis: ["./routes/v1/*.js"],
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use(isContentTypeApplicationJSON);
 
 // Use the routes module
 app.use('/', indexRoutes);
 
-app.use("/api/institutions", institutionRoutes);
+app.use(`/api/v1/institutions`, institutionRoutes);
+app.use("/api/v1/departments", departmentRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

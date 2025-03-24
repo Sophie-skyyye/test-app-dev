@@ -1,12 +1,12 @@
 import express from "express";
 
 import {
-  createInstitution,
-  getInstitutions,
-  getInstitution,
-  updateInstitution,
-  deleteInstitution,
-} from "../controllers/institution.js";
+  createDepartment,
+  getDepartments,
+  getDepartment,
+  updateDepartment,
+  deleteDepartment,
+} from "../../controllers/v1/department.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     Institution:
+ *     Department:
  *       type: object
  *       properties:
  *         id:
@@ -23,13 +23,10 @@ const router = express.Router();
  *           example: "123e4567-e89b-12d3-a456-426614174000"
  *         name:
  *           type: string
- *           example: "Institution Name"
- *         region:
+ *           example: "Department Name"
+ *         institutionId:
  *           type: string
- *           example: "Region Name"
- *         country:
- *           type: string
- *           example: "Country Name"
+ *           example: "Institution UUID"
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -42,20 +39,20 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/institutions:
+ * /api/v1/departments:
  *   post:
- *     summary: Create a new institution
+ *     summary: Create a new department
  *     tags:
- *       - Institution
+ *       - Department
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Institution'
+ *             $ref: '#/components/schemas/Department'
  *     responses:
  *       '201':
- *         description: Institution successfully created
+ *         description: Department successfully created
  *         content:
  *           application/json:
  *             schema:
@@ -63,21 +60,11 @@ const router = express.Router();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Institution successfully created"
+ *                   example: "Department successfully created"
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Institution'
- *       '400':
- *         description: Institution with the same name already exists
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Institution with the same name already exists"
+ *                     $ref: '#/components/schemas/Department'
  *       '500':
  *         description: Internal server error
  *         content:
@@ -89,15 +76,15 @@ const router = express.Router();
  *                   type: string
  *                   example: "An unexpected error occurred"
  */
-router.post("/", createInstitution);
+router.post("/", createDepartment);
 
 /**
  * @swagger
- * /api/institutions:
+ * /api/v1/departments:
  *   get:
- *     summary: Get all institutions
+ *     summary: Get all departments
  *     tags:
- *       - Institution
+ *       - Department
  *     responses:
  *       '200':
  *         description: Success
@@ -109,9 +96,9 @@ router.post("/", createInstitution);
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Institution'
+ *                     $ref: '#/components/schemas/Department'
  *       '404':
- *         description: No institutions found
+ *         description: No departments found
  *         content:
  *           application/json:
  *             schema:
@@ -119,7 +106,7 @@ router.post("/", createInstitution);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "No institutions found"
+ *                   example: "No departments found"
  *       '500':
  *         description: Internal server error
  *         content:
@@ -131,31 +118,31 @@ router.post("/", createInstitution);
  *                   type: string
  *                   example: "An unexpected error occurred"
  */
-router.get("/", getInstitutions);
+router.get("/", getDepartments);
 
 /**
  * @swagger
- * /api/institutions/{id}:
+ * /api/v1/departments/{id}:
  *   get:
- *     summary: Get an institution by id
+ *     summary: Get a department by id
  *     tags:
- *       - Institution
+ *       - Department
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The institution id
+ *         description: The department id
  *     responses:
  *       '200':
  *         description: Success
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Institution'
+ *               $ref: '#/components/schemas/Department'
  *       '404':
- *         description: No institution found with the provided id
+ *         description: No department found with the provided id
  *         content:
  *           application/json:
  *             schema:
@@ -163,7 +150,7 @@ router.get("/", getInstitutions);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "No institution with the id: {id} found"
+ *                   example: "No department with the id: {id} found"
  *       '500':
  *         description: Internal server error
  *         content:
@@ -175,31 +162,31 @@ router.get("/", getInstitutions);
  *                   type: string
  *                   example: "An unexpected error occurred"
  */
-router.get("/:id", getInstitution);
+router.get("/:id", getDepartment);
 
 /**
  * @swagger
- * /api/institutions/{id}:
+ * /api/v1/departments/{id}:
  *   put:
- *     summary: Update an institution by id
+ *     summary: Update a department by id
  *     tags:
- *       - Institution
+ *       - Department
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The institution id
+ *         description: The department id
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Institution'
+ *             $ref: '#/components/schemas/Department'
  *     responses:
  *       '200':
- *         description: Institution successfully updated
+ *         description: Department successfully updated
  *         content:
  *           application/json:
  *             schema:
@@ -207,11 +194,11 @@ router.get("/:id", getInstitution);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Institution with the id: {id} successfully updated"
+ *                   example: "Department with the id: {id} successfully updated"
  *                 data:
- *                   $ref: '#/components/schemas/Institution'
+ *                   $ref: '#/components/schemas/Department'
  *       '404':
- *         description: No institution found with the provided id
+ *         description: No department found with the provided id
  *         content:
  *           application/json:
  *             schema:
@@ -219,7 +206,7 @@ router.get("/:id", getInstitution);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "No institution with the id: {id} found"
+ *                   example: "No department with the id: {id} found"
  *       '500':
  *         description: Internal server error
  *         content:
@@ -231,25 +218,25 @@ router.get("/:id", getInstitution);
  *                   type: string
  *                   example: "An unexpected error occurred"
  */
-router.put("/:id", updateInstitution);
+router.put("/:id", updateDepartment);
 
 /**
  * @swagger
- * /api/institutions/{id}:
+ * /api/v1/departments/{id}:
  *   delete:
- *     summary: Delete an institution by id
+ *     summary: Delete a department by id
  *     tags:
- *       - Institution
+ *       - Department
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The institution id
+ *         description: The department id
  *     responses:
  *       '200':
- *         description: Institution successfully deleted
+ *         description: Department successfully deleted
  *         content:
  *           application/json:
  *             schema:
@@ -257,9 +244,9 @@ router.put("/:id", updateInstitution);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Institution with the id: {id} successfully deleted"
+ *                   example: "Department with the id: {id} successfully deleted"
  *       '404':
- *         description: No institution found with the provided id
+ *         description: No department found with the provided id
  *         content:
  *           application/json:
  *             schema:
@@ -267,7 +254,7 @@ router.put("/:id", updateInstitution);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "No institution with the id: {id} found"
+ *                   example: "No department with the id: {id} found"
  *       '500':
  *         description: Internal server error
  *         content:
@@ -279,6 +266,6 @@ router.put("/:id", updateInstitution);
  *                   type: string
  *                   example: "An unexpected error occurred"
  */
-router.delete("/:id", deleteInstitution);
+router.delete("/:id", deleteDepartment);
 
 export default router;

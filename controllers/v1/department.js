@@ -1,26 +1,25 @@
-import prisma from "../prisma/client.js";
+import prisma from "../../prisma/client.js";
 
 // Add the following code under import prisma from "../prisma/client.js";
-const createInstitution = async (req, res) => {
+const createDepartment = async (req, res) => {
     // Try/catch blocks are used to handle exceptions
     try {
       // Create a new institution
-      await prisma.institution.create({
+      await prisma.department.create({
         // Data to be inserted
         data: {
-          name: req.body.name,
-          region: req.body.region,
-          country: req.body.country,
+            name: req.body.name,
+            institutionId: req.body.institutionId,
         },
       });
   
       // Get all institutions from the institution table
-      const newInstitutions = await prisma.institution.findMany();
+      const newDepartments = await prisma.department.findMany();
   
       // Send a JSON response
       return res.status(201).json({
-        message: "Institution successfully created",
-        data: newInstitutions,
+        message: "Department successfully created",
+        data: newDepartments,
       });
     } catch (err) {
       return res.status(500).json({
@@ -31,17 +30,17 @@ const createInstitution = async (req, res) => {
 
 
   // Add the following code under the createInstitution function
-const getInstitutions = async (req, res) => {
+const getDepartments = async (req, res) => {
     try {
-      const institutions = await prisma.institution.findMany();
+      const departments = await prisma.department.findMany();
   
       // Check if there are no institutions
-      if (!institutions) {
-        return res.status(404).json({ message: "No institutions found" });
+      if (!departments) {
+        return res.status(404).json({ message: "No departments found" });
       }
   
       return res.status(200).json({
-        data: institutions,
+        data: departments,
       });
     } catch (err) {
       return res.status(500).json({
@@ -51,21 +50,21 @@ const getInstitutions = async (req, res) => {
   };
 
   // Add the following code under the getInstitutions function
-const getInstitution = async (req, res) => {
+const getDepartment = async (req, res) => {
     try {
-      const institution = await prisma.institution.findUnique({
+      const Department = await prisma.Department.findUnique({
         where: { id: req.params.id },
       });
   
       // Check if there is no institution
-      if (!institution) {
+      if (!department) {
         return res.status(404).json({
-          message: `No institution with the id: ${req.params.id} found`,
+          message: `No department with the id: ${req.params.id} found`,
         });
       }
   
       return res.status(200).json({
-        data: institution,
+        data: department,
       });
     } catch (err) {
       return res.status(500).json({
@@ -75,34 +74,33 @@ const getInstitution = async (req, res) => {
   };
 
   // Add the following code under the getInstitution function
-const updateInstitution = async (req, res) => {
+const updateDepartment = async (req, res) => {
     try {
       // Find the institution by id
-      let institution = await prisma.institution.findUnique({
+      let department = await prisma.department.findUnique({
         where: { id: req.params.id },
       });
   
       // Check if there is no institution
-      if (!institution) {
+      if (!department) {
         return res.status(404).json({
-          message: `No institution with the id: ${req.params.id} found`,
+          message: `No department with the id: ${req.params.id} found`,
         });
       }
   
       // Update the institution
-      institution = await prisma.institution.update({
+      department = await prisma.department.update({
         where: { id: req.params.id },
         data: {
           // Data to be updated
           name: req.body.name,
-          region: req.body.region,
-          country: req.body.country,
+        institutionId: req.body.institutionId,
         },
       });
   
       return res.status(200).json({
-        message: `Institution with the id: ${req.params.id} successfully updated`,
-        data: institution,
+        message: `Department with the id: ${req.params.id} successfully updated`,
+        data: department,
       });
     } catch (err) {
       return res.status(500).json({
@@ -112,24 +110,24 @@ const updateInstitution = async (req, res) => {
   };
 
   // Add the following code under the updateInstitution function
-const deleteInstitution = async (req, res) => {
+const deleteDepartment = async (req, res) => {
     try {
-      const institution = await prisma.institution.findUnique({
+      const department = await prisma.department.findUnique({
         where: { id: req.params.id },
       });
   
-      if (!institution) {
+      if (!department) {
         return res.status(404).json({
-          message: `No institution with the id: ${req.params.id} found`,
+          message: `No department with the id: ${req.params.id} found`,
         });
       }
   
-      await prisma.institution.delete({
+      await prisma.department.delete({
         where: { id: req.params.id },
       });
   
       return res.json({
-        message: `Institution with the id: ${req.params.id} successfully deleted`,
+        message: `Department with the id: ${req.params.id} successfully deleted`,
       });
     } catch (err) {
       return res.status(500).json({
@@ -140,9 +138,9 @@ const deleteInstitution = async (req, res) => {
 
   // Add the following code under the deleteInstitution function
 export {
-    createInstitution,
-    getInstitutions,
-    getInstitution,
-    updateInstitution,
-    deleteInstitution,
+    createDepartment,
+    getDepartments,
+    getDepartment,
+    updateDepartment,
+    deleteDepartment,
   };
